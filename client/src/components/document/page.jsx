@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import TextCustomize from "../ui/textCustomize";
 import TextArea from "antd/es/input/TextArea";
@@ -8,12 +8,14 @@ import Input from "antd/es/input/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo, setTodoList, updateTitleDesc } from "@/store/slices/todo";
 import axios from "axios";
+import useWindowSize from "@/hooks/useWindowSize";
 
-const Document = () => {
+const Document = ({ handlePage }) => {
   const [input, setInput] = useState();
   const [description, setDescription] = useState();
   const { todoList, currentTodoSelected } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
+  const { width } = useWindowSize();
 
   const handleDelete = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}todo`, {
@@ -25,6 +27,7 @@ const Document = () => {
     });
     if (response.ok) {
       dispatch(deleteTodo(currentTodoSelected._id));
+      handlePage(1);
     }
   };
 
@@ -66,29 +69,40 @@ const Document = () => {
   }, [currentTodoSelected]);
 
   return (
-    <div className="flex h-full flex-grow flex-col items-start gap-5 rounded-md border-[1px] border-[#e5e3e3] bg-white px-10 py-8">
-      <div className="flex w-full justify-between">
-        <Input
-          className="w-fit border-none text-4xl font-semibold text-[#1B1B1B]"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="New Addition"
-        />
-        <DeleteOutlined
-          className="cursor-pointer text-xl hover:text-red-700"
-          onClick={handleDelete}
+    <div>
+      {width < 1024 && (
+        <div
+          className="flex cursor-pointer gap-1 px-1 font-semibold"
+          onClick={() => handlePage(1)}
+        >
+          <ArrowLeftOutlined />
+          <p className="text-2xl">Back</p>
+        </div>
+      )}
+      <div className="flex h-full flex-grow flex-col items-start gap-5 rounded-md border-[1px] border-[#e5e3e3] bg-white px-10 py-8">
+        <div className="flex w-full justify-between">
+          <Input
+            className="border-none text-4xl font-semibold text-[#1B1B1B] sm:w-fit"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="New Addition"
+          />
+          <DeleteOutlined
+            className="cursor-pointer text-xl hover:text-red-700"
+            onClick={handleDelete}
+          />
+        </div>
+        <TextCustomize />
+        <div className="h-[1px] w-full bg-black"></div>
+        <textarea
+          // autoSize={true}
+          onChange={(e) => setDescription(e.target.value)}
+          // style={{ height: "100%", resize: "none" }}
+          placeholder="Type your description here"
+          className="h-full w-full resize-none border-none text-base font-light focus-visible:outline-none"
+          value={description}
         />
       </div>
-      <TextCustomize />
-      <div className="h-[1px] w-full bg-black"></div>
-      <textarea
-        // autoSize={true}
-        onChange={(e) => setDescription(e.target.value)}
-        // style={{ height: "100%", resize: "none" }}
-        placeholder="Type your description here"
-        className="h-full w-full resize-none border-none text-base font-light focus-visible:outline-none"
-        value={description}
-      />
     </div>
   );
 };

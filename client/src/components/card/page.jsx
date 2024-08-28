@@ -4,10 +4,11 @@ import { setCurrentTodoSelected } from "@/store/slices/todo";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-const TodoCard = ({ data }) => {
+const TodoCard = ({ data, handlePage }) => {
   const dispatch = useDispatch();
   const handleCardClick = () => {
     dispatch(setCurrentTodoSelected(data));
+    handlePage(2);
   };
 
   const date = new Date(data?.createdAt).toLocaleDateString("en-US", {
