@@ -40,10 +40,6 @@ const Document = () => {
         `${process.env.NEXT_PUBLIC_SERVER_URL}todo`,
         newdata,
       );
-
-      if (res?.statusText !== "OK") {
-        return alert("Error editing");
-      }
       const index = todoList.findIndex(
         (ele) => ele._id === currentTodoSelected._id,
       );
