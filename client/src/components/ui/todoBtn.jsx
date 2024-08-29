@@ -20,7 +20,7 @@ const TodoBtn = () => {
       await dispatch(setTodoList([newDataTodo, ...todoList]));
       await dispatch(setCurrentTodoSelected(newDataTodo));
     } else {
-      alert("Error adding");
+      alert("First Edit existing new Addition");
     }
     setLoading(false);
   };
