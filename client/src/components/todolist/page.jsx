@@ -25,7 +25,7 @@ const Todolist = ({ handlePage }) => {
     fetchData();
   }, []);
   return (
-    <div className="flex h-full w-[400px] flex-col gap-4 px-1 sm:px-0">
+    <>
       <div className="flex items-center justify-between">
         <TodoBtn />
         <i className="flex items-center">
@@ -34,13 +34,18 @@ const Todolist = ({ handlePage }) => {
       </div>
 
       <div className="card-list flex h-full flex-col gap-[15px] overflow-auto pe-2 sm:w-[400px]">
+        {loading && (
+          <div className="flex w-full justify-center">
+            <div className="loader mt-5"></div>
+          </div>
+        )}
         {todoList &&
           todoList.length > 0 &&
           todoList.map((data, ind) => (
             <TodoCard data={data} key={ind} handlePage={handlePage} />
           ))}
       </div>
-    </div>
+    </>
   );
 };
 

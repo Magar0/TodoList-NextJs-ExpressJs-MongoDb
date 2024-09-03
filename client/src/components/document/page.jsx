@@ -8,14 +8,12 @@ import Input from "antd/es/input/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo, setTodoList, updateTitleDesc } from "@/store/slices/todo";
 import axios from "axios";
-import useWindowSize from "@/hooks/useWindowSize";
 
 const Document = ({ handlePage }) => {
   const [input, setInput] = useState();
   const [description, setDescription] = useState();
   const { todoList, currentTodoSelected } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
-  const { width } = useWindowSize();
 
   const handleDelete = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}todo`, {
@@ -32,6 +30,7 @@ const Document = ({ handlePage }) => {
   };
 
   const handleUpdate = async () => {
+    console.log("update Running");
     const newdata = {
       _id: currentTodoSelected._id,
       title: input,
@@ -52,12 +51,20 @@ const Document = ({ handlePage }) => {
     }
   };
 
+  const debounce = (func, timeout) => {
+    let timer;
+    return () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(), timeout);
+    };
+  };
+
   useEffect(() => {
     if (
       input !== currentTodoSelected?.title ||
       description !== currentTodoSelected?.description
     ) {
-      handleUpdate();
+      debounce(handleUpdate, 1000)();
     }
   }, [input, description]);
 
@@ -69,16 +76,14 @@ const Document = ({ handlePage }) => {
   }, [currentTodoSelected]);
 
   return (
-    <div>
-      {width < 1024 && (
-        <div
-          className="flex cursor-pointer gap-1 px-1 font-semibold"
-          onClick={() => handlePage(1)}
-        >
-          <ArrowLeftOutlined />
-          <p className="text-2xl">Back</p>
-        </div>
-      )}
+    <>
+      <div
+        className="flex cursor-pointer gap-1 px-1 font-semibold lg:hidden"
+        onClick={() => handlePage(1)}
+      >
+        <ArrowLeftOutlined />
+        <p className="text-2xl">Back</p>
+      </div>
       <div className="flex h-full flex-grow flex-col items-start gap-5 rounded-md border-[1px] border-[#e5e3e3] bg-white px-10 py-8">
         <div className="flex w-full justify-between">
           <Input
@@ -103,7 +108,7 @@ const Document = ({ handlePage }) => {
           value={description}
         />
       </div>
-    </div>
+    </>
   );
 };
 
