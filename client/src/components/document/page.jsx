@@ -30,7 +30,9 @@ const Document = ({ handlePage }) => {
   };
 
   const handleUpdate = async () => {
-    console.log("update Running");
+    if (!input && !description) {
+      return alert("Fields can't be empty");
+    }
     const newdata = {
       _id: currentTodoSelected._id,
       title: input,
@@ -51,21 +53,19 @@ const Document = ({ handlePage }) => {
     }
   };
 
-  const debounce = (func, timeout) => {
-    let timer;
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      if (
+        input !== currentTodoSelected?.title ||
+        description !== currentTodoSelected?.description
+      ) {
+        handleUpdate();
+      }
+    }, 1000);
+
     return () => {
       clearTimeout(timer);
-      timer = setTimeout(() => func(), timeout);
     };
-  };
-
-  useEffect(() => {
-    if (
-      input !== currentTodoSelected?.title ||
-      description !== currentTodoSelected?.description
-    ) {
-      debounce(handleUpdate, 1000)();
-    }
   }, [input, description]);
 
   useEffect(() => {

@@ -28,7 +28,7 @@ const TodoBtn = () => {
   return (
     <button
       onClick={handleAddTodo}
-      className="flex gap-2 rounded-lg bg-black px-4 py-3 text-white"
+      className="flex gap-2 rounded-lg bg-black px-4 py-3 text-white hover:bg-slate-900"
     >
       <Image src={"/img/Vector.png"} height={10} width={22} /> ToDo
     </button>
