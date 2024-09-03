@@ -11,7 +11,7 @@
 
 * Developed a feature-rich Todo App using the MERN stack (MongoDB, Express.js, Next.Js, Node.js)
 * Developed a responsive platform accross all devices including mobiles & tablets.
-* Enabled extensive user interaction with adding, editing ,deleting.
+* Enabled extensive user interaction with adding, editing ,deleting, searching and also implemented debouncing feature.
 * Leveraged Node.js, Express.js and other technologies for a robust and scalable backend foundation.
 * Employed Redux Toolkit for efficient state management and data flow.
 
